@@ -1,29 +1,43 @@
 <html>
+
   <head>
     <title>Movie Demo</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/base.css" />
-	<link rel="stylesheet" href="./css/react-bootstrap-table-all.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-	
-  </head>
-  
-  <body>
-    <script type="text/babel">
-      // To get started with this tutorial running your own code, simply remove
-      // the script tag loading scripts/example.js and start writing code here.
+    <link rel="stylesheet" href="./css/react-bootstrap-table-all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="scripts/bootstrap-filestyle.min.js">
+
+
     </script>
+	<h1 for="filestyle-3">Movie Demo</h1>	
+  </head>
+
+  <body>
 	
-  <form action="/fileupload" method="post" enctype='multipart/form-data'  onsubmit="">
-  
-    <input type="file" id="resource" name="resource" class="filestyle" data-icon="false">
-  	
-    <button type="submit" class="btn btn-info">upload</button>
-  </form>	
-      <div id="container"></div>
-	  <div id="chart"></div>
-    
+    <script type="text/babel">
+      // To get started with this tutorial running your own code, simply remove // the script tag loading scripts/example.js and start writing code here.
+    </script>
+    <!--<input type="file" class="filestyle" data-icon="false">
+    <form action="/fileupload" method="post" enctype='multipart/form-data' onsubmit="">
+
+      <button type="submit" class="btn btn-info">upload</button>
+    </form>	-->
+
+<input type="file" class="filestyle" data-buttonName="btn-primary" id="filestyle-3" tabindex="-1" style="position: absolute; clip: rect(0px 0px 0px 0px);">
+    <div class="bootstrap-filestyle input-group position">
+      
+	  <label for="filestyle-3" class="btn btn-primary ">
+		<span class="icon-span-filestyle glyphicon glyphicon-folder-open"></span> 
+		<span class="buttonText">Choose file</span>
+	  </label>
+      </span>
+    </div>
+    <div id="container"></div>
+    <div id="chart"></div>
+
   </body>
-  
-  <script  src="./out/index.js"></script>
+
+  <script src="./out/index.js"></script>
+
 </html>

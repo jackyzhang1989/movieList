@@ -56,326 +56,315 @@
 	var $ = __webpack_require__(171);;
 
 	__webpack_require__(172)(Highcharts);
+
 	var dataOptions = {
-	    chart: {
-	        type: 'scatter',
-	        zoomType: 'xy'
-	    },
+	  chart: {
+	    type: 'scatter',
+	    zoomType: 'xy'
+	  },
+	  title: {
+	    text: 'sctter plot'
+	  },
+	  subtitle: {
+	    text: 'movie.json'
+	  },
+	  xAxis: {
 	    title: {
-	        text: 'sctter plot'
+	      enabled: true,
+	      text: 'vote_average'
 	    },
-	    subtitle: {
-	        text: 'movie.json'
-	    },
-	    xAxis: {
-	        title: {
+	    startOnTick: true,
+	    endOnTick: true,
+	    showLastLabel: true
+	  },
+	  yAxis: {
+	    title: {
+	      text: 'vote_count'
+	    }
+	  },
+	  legend: {
+	    layout: 'vertical',
+	    align: 'left',
+	    verticalAlign: 'top',
+	    x: 100,
+	    y: 70,
+	    floating: true,
+	    backgroundColor: Highcharts.theme && Highcharts.theme.legendBackgroundColor || '#FFFFFF',
+	    borderWidth: 1
+	  },
+	  plotOptions: {
+	    scatter: {
+	      marker: {
+	        radius: 5,
+	        states: {
+	          hover: {
 	            enabled: true,
-	            text: 'vote_average'
-	        },
-	        startOnTick: true,
-	        endOnTick: true,
-	        showLastLabel: true
-	    },
-	    yAxis: {
-	        title: {
-	            text: 'vote_count'
+	            lineColor: 'rgb(100,100,100)'
+	          }
 	        }
-	    },
-	    legend: {
-	        layout: 'vertical',
-	        align: 'left',
-	        verticalAlign: 'top',
-	        x: 100,
-	        y: 70,
-	        floating: true,
-	        backgroundColor: Highcharts.theme && Highcharts.theme.legendBackgroundColor || '#FFFFFF',
-	        borderWidth: 1
-	    },
-	    plotOptions: {
-	        scatter: {
-	            marker: {
-	                radius: 5,
-	                states: {
-	                    hover: {
-	                        enabled: true,
-	                        lineColor: 'rgb(100,100,100)'
-	                    }
-	                }
-	            },
-	            states: {
-	                hover: {
-	                    marker: {
-	                        enabled: false
-	                    }
-	                }
-	            },
-	            tooltip: {
-	                headerFormat: '<b>{series.name}</b><br>',
-	                pointFormat: '{point.x} cm, {point.y} kg'
-	            }
+	      },
+	      states: {
+	        hover: {
+	          marker: {
+	            enabled: false
+	          }
 	        }
-	    },
-	    series: [{
-	        name: 'rate',
-	        color: 'rgba(223, 83, 83, .5)'
-	    }]
+	      },
+	      tooltip: {
+	        headerFormat: '<b>{series.name}</b><br>',
+	        pointFormat: '{point.x} , {point.y} '
+	      }
+	    }
+	  },
+	  series: [{
+	    name: 'rate',
+	    color: 'rgba(223, 83, 83, .5)'
+	  }]
 
 	};
-
-	var tmp = {
-	    chart: {
-	        type: 'bar'
-	    },
-	    title: {
-	        text: 'Fruit Consumption'
-	    },
-	    xAxis: {
-	        categories: ['Apples', 'Bananas', 'Oranges']
-	    },
-	    yAxis: {
-	        title: {
-	            text: 'Fruit eaten'
-	        }
-	    },
-	    series: [{
-	        name: 'Jane',
-	        data: [1, 0, 4]
-	    }, {
-	        name: 'John',
-	        data: [5, 7, 3]
-	    }]
-	    // ... more options - see http://api.highcharts.com/highcharts
-	};
-
-	// Generate the chart
-	//var chart = Highcharts.chart(document.getElementById('chart'), dataOptions);
 
 	//////////////
 	var MovieBox = React.createClass({
-	    displayName: 'MovieBox',
+	  displayName: 'MovieBox',
 
-	    loadMoviesFromServer: function loadMoviesFromServer() {
+	  loadMoviesFromServer: function loadMoviesFromServer() {
 
-	        $.ajax({
-	            url: this.props.url,
-	            dataType: 'json',
-	            cache: false,
-	            success: (function (data) {
-	                $("#err").hide();
-	                this.setState({ data: data });
-
-	                //report
-	                var arrayLength = data.movies.length;
-	                var newData = new Array();
-	                for (var i = 0; i < arrayLength; i++) {
-	                    var tmp = new Array();
-
-	                    tmp.push(data.movies[i]['vote_average']);
-	                    tmp.push(data.movies[i]['vote_count']);
-	                    //Do something
-	                    newData.push(tmp);
-	                }
-	                dataOptions['series'][0]['data'] = newData;
-	                console.log(dataOptions);
-	                draw();
-	                //var chart = Highcharts.chart(document.getElementById('chart'), dataOptions);
-	            }).bind(this),
-	            error: (function (xhr, status, err) {
-	                $("#err").show();
-	                console.error(this.props.url, status, err.toString());
-	            }).bind(this)
+	    $.ajax({
+	      url: this.props.url,
+	      dataType: 'json',
+	      cache: false,
+	      success: (function (data) {
+	        $("#err").hide();
+	        this.setState({
+	          data: data
 	        });
-	    },
-	    handleMovieSubmit: function handleMovieSubmit() {
-	        var movies = this.state.data;
 
-	        $.ajax({
-	            url: this.props.url,
-	            dataType: 'json',
-	            type: 'POST',
-	            data: movies,
-	            success: (function (data) {
-	                $("#err").hide();
+	        //report
+	        var arrayLength = data.movies.length;
+	        var newData = new Array();
+	        for (var i = 0; i < arrayLength; i++) {
+	          var tmp = new Array();
 
-	                this.setState({ data: data });
-	            }).bind(this),
-	            error: (function (xhr, status, err) {
-	                this.setState({ data: movies });
-	                $("#err").show();
-	                console.error(this.props.url, status, err.toString());
-	            }).bind(this)
+	          tmp.push(parseInt(data.movies[i]['vote_average']));
+	          tmp.push(parseInt(data.movies[i]['vote_count']));
+	          //Do something
+	          newData.push(tmp);
+	        }
+	        dataOptions['series'][0]['data'] = newData;
+	        console.log(dataOptions);
+	        draw();
+	        //var chart = Highcharts.chart(document.getElementById('chart'), dataOptions);
+	      }).bind(this),
+	      error: (function (xhr, status, err) {
+	        $("#err").show();
+	        console.error(this.props.url, status, err.toString());
+	      }).bind(this)
+	    });
+	  },
+	  handleMovieSubmit: function handleMovieSubmit() {
+	    var movies = this.state.data;
+
+	    $.ajax({
+	      url: this.props.url,
+	      dataType: 'json',
+	      type: 'POST',
+	      data: movies,
+	      success: (function (data) {
+	        $("#err").hide();
+
+	        this.setState({
+	          data: data
 	        });
-	    },
-	    getInitialState: function getInitialState() {
-	        url = this.props.url;
-	        return {
-	            data: {
-	                "movies": [{
-	                    "backdrop_path": "/gmLMaDXi4lFWG8WitaCYOJS5GtL.jpg",
-	                    "id": 1,
-	                    "original_title": "Star Wars: The Clone Wars",
-	                    "release_date": "2008-08-15",
-	                    "poster_path": "http://image.tmdb.org/t/p/w300/xd6yhmtS6mEURZLwUDT5raEMbf.jpg",
-	                    "title": "Star Wars: The Clone Wars",
-	                    "vote_average": 7.7,
-	                    "vote_count": 12
-	                }]
-	            }
-	        };
-	    },
-	    componentDidMount: function componentDidMount() {
-	        this.loadMoviesFromServer();
-	        setInterval(this.loadMoviesFromServer, this.props.pollInterval);
-	    },
-	    options: (function () {
-	        var res = {};
-	        res['handleConfirmDeleteRow'] = function (exeDelete, key) {
-	            exeDelete();
-	        };
-	        res['noDataText'] = "No Data";
-	        return res;
-	    })(),
+	      }).bind(this),
+	      error: (function (xhr, status, err) {
+	        this.setState({
+	          data: movies
+	        });
+	        $("#err").show();
+	        console.error(this.props.url, status, err.toString());
+	      }).bind(this)
+	    });
+	  },
+	  getInitialState: function getInitialState() {
+	    url = this.props.url;
+	    return {
+	      data: {
+	        "movies": [{
+	          "backdrop_path": "/gmLMaDXi4lFWG8WitaCYOJS5GtL.jpg",
+	          "id": 1,
+	          "original_title": "Star Wars: The Clone Wars",
+	          "release_date": "2008-08-15",
+	          "poster_path": "http://image.tmdb.org/t/p/w300/xd6yhmtS6mEURZLwUDT5raEMbf.jpg",
+	          "title": "Star Wars: The Clone Wars",
+	          "vote_average": 7.7,
+	          "vote_count": 12
+	        }]
+	      }
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.loadMoviesFromServer();
+	    setInterval(this.loadMoviesFromServer, this.props.pollInterval);
+	  },
+	  options: (function () {
+	    var res = {};
+	    res['handleConfirmDeleteRow'] = function (exeDelete, key) {
+	      exeDelete();
+	    };
+	    res['noDataText'] = "No Data";
+	    return res;
+	  })(),
 
-	    selectRowProp: {
-	        mode: "radio",
-	        clickToSelect: true,
-	        bgColor: "rgb(238, 193, 213)",
-	        onSelect: onRowSelect
-	    },
-	    deleteEle: function deleteEle(index) {
-	        this.refs.table.handleDropRow([index + 1]);
-	        var cache = this.state.data.movies.slice(index + 1);
-	        this.setState({ data: { movies: cache } });
-	        //this.setState({data: this.state.data.movies.slice(index + 1)};
-	        this.state.data.movies = this.state.data.movies.slice(index + 1);
-	        //console.log(this.state.data.movies.slice(index + 1).length);
-	        console.log(this.state.data.movies.length);
-	        this.handleMovieSubmit();
-	    },
-	    actionFormatter: function actionFormatter(cell, row) {
-	        return React.createElement(DeleteBtn, { cell: cell, data: this.state.data, functor: this.deleteEle });
-	    },
-	    handleSubmit: function handleSubmit(e) {
-	        //e.preventDefault();
-	    },
+	  selectRowProp: {
+	    mode: "radio",
+	    clickToSelect: true,
+	    bgColor: "rgb(238, 193, 213)",
+	    onSelect: onRowSelect
+	  },
+	  deleteEle: function deleteEle(index) {
+	    this.refs.table.handleDropRow([index + 1]);
+	    var cache = this.state.data.movies.slice(index + 1);
+	    this.setState({
+	      data: {
+	        movies: cache
+	      }
+	    });
+	    this.state.data.movies = this.state.data.movies.slice(index + 1);
+	    //console.log(this.state.data.movies.slice(index + 1).length);
+	    console.log(this.state.data.movies.length);
+	    this.handleMovieSubmit();
+	  },
+	  actionFormatter: function actionFormatter(cell, row) {
+	    return React.createElement(DeleteBtn, { cell: cell,
+	      data: this.state.data,
+	      functor: this.deleteEle
+	    });
+	  },
+	  handleSubmit: function handleSubmit(e) {
+	    //e.preventDefault();
+	  },
 
-	    handleFile: function handleFile(e) {
-	        var self = this;
-	        var reader = new FileReader();
-	        var file = e.target.files[0];
+	  handleFile: function handleFile(e) {
+	    var self = this;
+	    var reader = new FileReader();
+	    var file = e.target.files[0];
 
-	        reader.onload = function (upload) {
-	            //this.setState({data: reader.result});
-	            //this.handleMovieSubmit();
-	            $.ajax({
-	                url: "/api/movies",
-	                dataType: 'json',
-	                type: 'POST',
-	                data: reader.result,
-	                success: (function (data) {
-	                    $("#err").hide();
+	    reader.onload = function (upload) {
+	      //this.setState({data: reader.result});
+	      //this.handleMovieSubmit();
+	      $.ajax({
+	        url: "/api/movies",
+	        dataType: 'json',
+	        type: 'POST',
+	        data: reader.result,
+	        success: (function (data) {
+	          $("#err").hide();
 
-	                    //this.setState({data: data});
-	                }).bind(this),
-	                error: (function (xhr, status, err) {
-	                    //this.setState(reader.result);
-	                    $("#err").show();
-	                    console.error(this.props.url, status, err.toString());
-	                }).bind(this)
-	            });
-	            console.log(this);
-	            console.log(file);
-	            console.log(upload);
-	        };
-	        reader.readAsBinaryString(file);
-	    },
-	    render: function render() {
-	        return React.createElement(
-	            'div',
-	            null,
-	            React.createElement(
-	                'div',
-	                { id: 'err', className: 'alert alert-danger' },
-	                'opps, error occur'
-	            ),
-	            React.createElement(
-	                BootstrapTable,
-	                { data: this.state.data.movies, striped: true, hover: true, options: this.options, ref: 'table' },
-	                React.createElement(
-	                    TableHeaderColumn,
-	                    { dataField: 'id', isKey: true, dataAlign: 'center', width: '50%', dataSort: true },
-	                    'ID'
-	                ),
-	                React.createElement(
-	                    TableHeaderColumn,
-	                    { dataField: 'poster_path', dataAlign: 'center', dataFormat: postFormatter },
-	                    'Poster'
-	                ),
-	                React.createElement(
-	                    TableHeaderColumn,
-	                    { dataField: 'title', dataAlign: 'center', dataSort: true },
-	                    'Movie Name'
-	                ),
-	                React.createElement(
-	                    TableHeaderColumn,
-	                    { dataField: 'release_date', dataAlign: 'center', dataSort: true },
-	                    'Release Date'
-	                ),
-	                React.createElement(
-	                    TableHeaderColumn,
-	                    { dataField: 'vote_average', dataAlign: 'center', dataSort: true },
-	                    'Vote Average'
-	                ),
-	                React.createElement(
-	                    TableHeaderColumn,
-	                    { dataField: 'vote_count', dataAlign: 'center', dataSort: true },
-	                    'Vote Count'
-	                ),
-	                React.createElement(
-	                    TableHeaderColumn,
-	                    { dataField: 'id', dataAlign: 'center', dataFormat: this.actionFormatter, ref: 'action' },
-	                    'Action'
-	                )
-	            )
-	        );
-	    }
+	          //this.setState({data: data});
+	        }).bind(this),
+	        error: (function (xhr, status, err) {
+	          //this.setState(reader.result);
+	          $("#err").show();
+	          console.error(this.props.url, status, err.toString());
+	        }).bind(this)
+	      });
+	      console.log(this);
+	      console.log(file);
+	      console.log(upload);
+	    };
+	    reader.readAsBinaryString(file);
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { id: 'err', className: 'alert alert-danger' },
+	        'opps, error occur'
+	      ),
+	      React.createElement(
+	        BootstrapTable,
+	        { data: this.state.data.movies, striped: true, hover: true, options: this.options, ref: 'table' },
+	        React.createElement(
+	          TableHeaderColumn,
+	          { dataField: 'id', isKey: true, dataAlign: 'center', width: '50%', dataSort: true },
+	          'ID'
+	        ),
+	        React.createElement(
+	          TableHeaderColumn,
+	          { dataField: 'poster_path', dataAlign: 'center', dataFormat: postFormatter },
+	          'Poster'
+	        ),
+	        React.createElement(
+	          TableHeaderColumn,
+	          { dataField: 'title', dataAlign: 'center', dataSort: true },
+	          'Movie Name'
+	        ),
+	        React.createElement(
+	          TableHeaderColumn,
+	          { dataField: 'release_date', dataAlign: 'center', dataSort: true },
+	          'Release Date'
+	        ),
+	        React.createElement(
+	          TableHeaderColumn,
+	          { dataField: 'vote_average', dataAlign: 'center', dataSort: true },
+	          'Vote Average'
+	        ),
+	        React.createElement(
+	          TableHeaderColumn,
+	          { dataField: 'vote_count', dataAlign: 'center', dataSort: true },
+	          'Vote Count'
+	        ),
+	        React.createElement(
+	          TableHeaderColumn,
+	          { dataField: 'id', dataAlign: 'center', dataFormat: this.actionFormatter, ref: 'action' },
+	          'Action'
+	        )
+	      )
+	    );
+	  }
 	});
 
 	var DeleteBtn = React.createClass({
-	    displayName: 'DeleteBtn',
+	  displayName: 'DeleteBtn',
 
-	    handleClick: function handleClick(cell, functor) {
-	        functor(cell - 1);
-	    },
-	    render: function render() {
-	        return React.createElement(
-	            'a',
-	            { className: 'pointer', onClick: this.handleClick.bind(this, this.props.cell, this.props.functor) },
-	            React.createElement(
-	                'i',
-	                { className: 'material-icons' },
-	                'delete_forever'
-	            ),
-	            'Delete'
-	        );
-	    }
+	  handleClick: function handleClick(cell, functor) {
+	    functor(cell - 1);
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'a',
+	      { className: 'pointer',
+	        onClick: this.handleClick.bind(this, this.props.cell, this.props.functor) },
+	      ' ',
+	      React.createElement(
+	        'i',
+	        { className: 'material-icons' },
+	        ' delete_forever '
+	      ),
+	      'Delete'
+	    );
+	  }
 	});
+
 	function draw() {
-	    var chart = Highcharts.chart(document.getElementById('chart'), dataOptions);
+	  Highcharts.chart(document.getElementById('chart'), dataOptions);
 	}
-	function onRowSelect(cell, row) {
-	    //var chart = Highcharts.chart(document.getElementById('chart'), dataOptions);	
-	}
+
+	function onRowSelect(cell, row) {}
 
 	function postFormatter(cell, row) {
-	    return '<img class="poster shadowed" height="209" width="140" alt="Movie Poster" title="Movie Poster" src="' + cell + '" itemprop="image">';
+	  return '<img class="poster shadowed" height="209" width="140" alt="Movie Poster" title="Movie Poster" src="' + cell + '" itemprop="image">';
 	}
 
 	function priceFormatter(cell, row) {
-	    return '<i class="glyphicon glyphicon-usd"></i> ' + cell;
+	  return '<i class="glyphicon glyphicon-usd"></i> ' + cell;
 	}
 	var url;
-	ReactDOM.render(React.createElement(MovieBox, { url: '/api/movies', pollInterval: 6000 }), document.getElementById('container'));
+	ReactDOM.render(React.createElement(MovieBox, { url: '/api/movies',
+	  pollInterval: 60000
+	}), document.getElementById('container'));
 
 	//////////////////////////////////////////
 	//var DropzoneDemo = React.createClass({
