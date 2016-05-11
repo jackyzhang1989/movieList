@@ -66,7 +66,7 @@ upload = function(req, res, next) {
       console.log(err);
     }
 
-
+console.log(files.resource);
     if (files.resource) {
       var filename = files.resource.name;
 

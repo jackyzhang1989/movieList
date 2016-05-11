@@ -18,21 +18,28 @@
     <script type="text/babel">
       // To get started with this tutorial running your own code, simply remove // the script tag loading scripts/example.js and start writing code here.
     </script>
-    <!--<input type="file" class="filestyle" data-icon="false">
-    <form action="/fileupload" method="post" enctype='multipart/form-data' onsubmit="">
-
+    
+    <!--<form action="/fileupload" method="post" enctype='multipart/form-data' onsubmit="">
+	  <input id="resource" name="resource" type="file" class="filestyle" data-icon="false">
       <button type="submit" class="btn btn-info">upload</button>
-    </form>	-->
+    </form>-->
 
-<input type="file" class="filestyle" data-buttonName="btn-primary" id="filestyle-3" tabindex="-1" style="position: absolute; clip: rect(0px 0px 0px 0px);">
+	
     <div class="bootstrap-filestyle input-group position">
-      
-	  <label for="filestyle-3" class="btn btn-primary ">
+      <input type="text" class="form-control" placeholder="" disabled="" style="width: 200px">
+	  <label for="resource" class="btn btn-primary btnBox">
 		<span class="icon-span-filestyle glyphicon glyphicon-folder-open"></span> 
 		<span class="buttonText">Choose file</span>
 	  </label>
       </span>
+	  <form  action="/fileupload" method="post" enctype='multipart/form-data' onsubmit="" style="display: inline-block; ">
+	    <input type="file" class="filestyle" data-buttonName="btn-primary" id="resource" name="resource" tabindex="-1" style="position: absolute; clip: rect(0px 0px 0px 0px);">
+        <button type="submit" class="btn btn-primary btnBox">Upload</button>
+      </form>	  
     </div>
+	
+
+	
     <div id="container"></div>
     <div id="chart"></div>
 
