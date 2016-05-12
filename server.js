@@ -10,13 +10,14 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+var formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 
-var COMMENTS_FILE = path.join(__dirname, 'comments.json');
+var MOVIES_FILE = path.join(__dirname, 'movies.json');
 
 app.set('port', (process.env.PORT || 3000));
 
@@ -35,40 +36,89 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/api/comments', function(req, res) {
-  fs.readFile(COMMENTS_FILE, function(err, data) {
+app.get('/api/movies', function(req, res) {
+  fs.readFile(MOVIES_FILE, {encoding: 'utf-8'}, function(err, data) {
     if (err) {
+	  res.status(500).send('Something broke!');
       console.error(err);
-      process.exit(1);
+	  return;
+      //process.exit(1);
     }
+	data = data.replace(/^\uFEFF/, '');
     res.json(JSON.parse(data));
   });
 });
+upload = function(req, res, next){
+	console.log("upload");
+  var message = '';
+  var form = new formidable.IncomingForm();   //创建上传表单
+    form.encoding = 'utf-8';        //设置编辑
+    form.uploadDir = './';     //设置上传目录
+    form.keepExtensions = true;     //保留后缀
+    form.maxFieldsSize = 2 * 1024 * 1024;   //文件大小
 
-app.post('/api/comments', function(req, res) {
-  fs.readFile(COMMENTS_FILE, function(err, data) {
+  form.parse(req, function(err, fields, files) {
     if (err) {
-      console.error(err);
-      process.exit(1);
-    }
-    var comments = JSON.parse(data);
+      console.log(err);
+    }  
+
+
+if(files.resource){
+	    var filename = files.resource.name;
+
+    // 对文件名进行处理，以应对上传同名文件的情况
+      //var nameArray = filename.split('.');
+      //var type = nameArray[nameArray.length-1];
+      //var name = '';
+      //for(var i=0; i<nameArray.length-1; i++){
+      //    name = name + nameArray[i];
+      //}
+      //var rand = Math.random()*100 + 900;
+      //var num = parseInt(rand, 10);
+      //
+      //var avatarName = name + num +  '.' + type;
+
+    var newPath = form.uploadDir + filename ;
+	console.log(files.resource.path);
+	//fs.writeFile();
+    fs.renameSync(files.resource.path, newPath);
+}
+  //重命名
+  });
+  //res.sendStatus(200);
+  res.redirect('/');
+};
+app.post('/fileupload', upload);
+app.post('/api/movies', function(req, res) {
+
+  //fs.readFile(MOVIES_FILE, function(err, data) {
+  //  if (err) {
+  //    console.error(err);
+  //    process.exit(1);
+  //  }
+  //console.log(req.body);
+    //var content = JSON.parse(req.body);
+	//console.log(content.movies.length);
     // NOTE: In a real implementation, we would likely rely on a database or
     // some other approach (e.g. UUIDs) to ensure a globally unique id. We'll
     // treat Date.now() as unique-enough for our purposes.
-    var newComment = {
-      id: Date.now(),
-      author: req.body.author,
-      text: req.body.text,
-    };
-    comments.push(newComment);
-    fs.writeFile(COMMENTS_FILE, JSON.stringify(comments, null, 4), function(err) {
+    //var newComment = {
+    //  id: Date.now(),
+    //  author: req.body.author,
+    //  text: req.body.text,
+    //};
+	//console.log(JSON.stringify(comments));
+    //comments.push(newComment);
+    fs.writeFile(MOVIES_FILE, JSON.stringify(req.body, null, 4), function(err) {
       if (err) {
+		res.status(500).send('Something broke!');
         console.error(err);
-        process.exit(1);
+		return;
+        //process.exit(1);
       }
-      res.json(comments);
+      res.json(req.body);
     });
-  });
+
 });
 
 
